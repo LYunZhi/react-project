@@ -22,30 +22,37 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentUser: data.currentUser.name,
-      messages: data.messages
+      currentUser: '',
+      messages: []
     }
+    this.socket = new WebSocket('ws://localhost:3001/')
     this.newMessage = this.newMessage.bind(this)
+    this.changeName = this.changeName.bind(this)
   }
 
   newMessage(message) {
-    const messages = this.state.messages.concat(message)
+    this.socket.send(JSON.stringify(message))
+  }
+
+  changeName(name) {
     this.setState({
-      messages: messages
+      currentUser: name
     })
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
+    this.socket.onopen = (event) => {
+      console.log('Connected to server')
+    }
+
+    this.socket.onmessage = (event) => {
+      const nextMessage = JSON.parse(event.data)
+      const allMessages = this.state.messages.concat(nextMessage)
+
+      this.setState({
+        messages: allMessages
+      })
+    }
   }
 
   render() {
@@ -55,7 +62,7 @@ class App extends Component {
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
       <MessageList messages = { this.state.messages }/>
-      <ChatBar currentUser = { this.state.currentUser } newMessage = {this.newMessage}/>
+      <ChatBar currentUser = { this.state.currentUser } newMessage = {this.newMessage} changeName = {this.changeName}/>
       </div>
     );
   }

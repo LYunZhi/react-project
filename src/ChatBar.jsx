@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 
-function ChatBar({currentUser, newMessage}) {
+function ChatBar({currentUser, newMessage, changeName}) {
 
   const currentUserValue = currentUser ? currentUser : 'Anonymous'
 
   function onEnter(event) {
     const message = {
-      id: Math.floor(Math.random() * Math.floor(100)),
       username: currentUserValue,
       content: event.target.value
     }
@@ -17,9 +16,15 @@ function ChatBar({currentUser, newMessage}) {
     }
   }
 
+  function onEnterName(event) {
+    if (event.key === 'Enter') {
+      changeName(event.target.value)
+    }
+  }
+
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" defaultValue={currentUserValue}/>
+        <input className="chatbar-username" placeholder="Your Name (Optional)" defaultValue={currentUserValue} onKeyPress={onEnterName}/>
         <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyPress={onEnter} />
       </footer>
       )
