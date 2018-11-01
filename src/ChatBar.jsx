@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 function ChatBar({currentUser, newMessage, changeName}) {
 
-  const currentUserValue = currentUser ? currentUser : 'Anonymous'
+  const currentUserValue = currentUser.name ? currentUser.name : 'Anonymous'
 
   function onEnter(event) {
     const message = {

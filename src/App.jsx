@@ -6,7 +6,9 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentUser: '',
+      currentUser: {
+        name: ''
+      },
       messages: [],
       notifications: [],
       usersOnline: 0
@@ -22,7 +24,7 @@ class App extends Component {
   }
 
   changeName(name) {
-    const oldUsername = this.state.currentUser
+    const oldUsername = this.state.currentUser.name
     this.socket.send(JSON.stringify({
       type: 'changeName',
       oldUsername,
@@ -55,7 +57,9 @@ class App extends Component {
           allMessages = this.state.messages.concat(incomingData)
 
           this.setState({
-            currentUser: incomingData.username,
+            currentUser: {
+              name: incomingData.username
+            },
             messages: allMessages
           })
           break;
