@@ -1,19 +1,28 @@
 import React, {Component} from 'react';
 
-function Message({message: {username, content}}) {
+function Message({message: {type, username, content}}) {
+
+  let messageBox;
+
+    switch (type) {
+      case 'addMessage':
+        messageBox = (<div className="message">
+          <span className="message-username">{username}</span>
+          <span className="message-content">{content}</span>
+        </div>)
+        break;
+      case 'changeName':
+        messageBox = (<div className="notification">
+           <span className="notification-content">{content}</span>
+        </div>)
+        break;
+    }
 
     return (
       <div>
-      <div className="message">
-        <span className="message-username">{username}</span>
-        <span className="message-content">{content}</span>
-      </div>
-      <div className="message system">
-        Anonymous1 changed their name to nomnom.
-      </div>
+        {messageBox}
       </div>
       )
-
 }
 
 export default Message;

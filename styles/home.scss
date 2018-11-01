@@ -38,7 +38,8 @@
       flex: 2;
     }
 
-    .message {
+    .message,
+    .notification {
       display: flex;
       padding: 5px;
     }
@@ -49,10 +50,15 @@
     }
 
     .message-content,
-    .message-username {
+    .message-username,
+    .notification-content {
       overflow: hidden;
       margin: 5px;
       padding: 0 10px;
+    }
+
+    .notification-content {
+      font-style: italic;
     }
 
     .message-content {
@@ -85,4 +91,9 @@
       line-height: 60px;
       padding: 0 10px;
       text-decoration: none;
+    }
+
+    .counter {
+      float: right;
+      line-height: 60px
     }

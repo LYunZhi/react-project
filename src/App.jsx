@@ -7,7 +7,9 @@ class App extends Component {
     super(props)
     this.state = {
       currentUser: '',
-      messages: []
+      messages: [],
+      notifications: [],
+      usersOnline: 0
     }
     this.socket = new WebSocket('ws://localhost:3001/')
     this.newMessage = this.newMessage.bind(this)
@@ -15,27 +17,64 @@ class App extends Component {
   }
 
   newMessage(message) {
+    message.type = 'addMessage'
     this.socket.send(JSON.stringify(message))
   }
 
   changeName(name) {
-    this.setState({
-      currentUser: name
-    })
+    const oldUsername = this.state.currentUser
+    this.socket.send(JSON.stringify({
+      type: 'changeName',
+      oldUsername,
+      username: name
+    }))
   }
 
   componentDidMount() {
     this.socket.onopen = (event) => {
       console.log('Connected to server')
+      this.socket.send(JSON.stringify({
+        type: 'onlineCount'
+      }))
     }
 
     this.socket.onmessage = (event) => {
-      const nextMessage = JSON.parse(event.data)
-      const allMessages = this.state.messages.concat(nextMessage)
+      const incomingData = JSON.parse(event.data)
+      const incomingType = incomingData.type
+      let allMessages
 
-      this.setState({
-        messages: allMessages
-      })
+      switch(incomingType) {
+        case 'addMessage':
+          allMessages = this.state.messages.concat(incomingData)
+
+          this.setState({
+            messages: allMessages
+          })
+          break;
+        case 'changeName':
+          allMessages = this.state.messages.concat(incomingData)
+
+          this.setState({
+            currentUser: incomingData.username,
+            messages: allMessages
+          })
+          break;
+        case 'onlineCount':
+          const count = incomingData.count
+          this.setState({
+            usersOnline: count
+          })
+          break;
+        default:
+          throw new Error("Unknown event type " + data.type)
+      }
+    }
+
+    this.socket.onclose = (event) => {
+      console.log('Connection closed')
+      this.socket.send(JSON.stringify({
+        type: 'onlineCount'
+      }))
     }
   }
 
@@ -44,6 +83,7 @@ class App extends Component {
       <div>
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
+        <span className="counter">{this.state.usersOnline} users online</span>
       </nav>
       <MessageList messages = { this.state.messages }/>
       <ChatBar currentUser = { this.state.currentUser } newMessage = {this.newMessage} changeName = {this.changeName}/>
