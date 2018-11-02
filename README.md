@@ -26,5 +26,5 @@ Chatty App is an app that pretends to be slack, but it's not. It's better. HAHAH
 
 ## Screenshots
 
-!['Screenshot of main app'](https://github.com/LYunZhi/tweeter/blob/master/docs/tweet-main.png?raw=true)
-!['Screenshot of when error comes up'](https://github.com/LYunZhi/tweeter/blob/master/docs/tweet-error.png?raw=true)
+!['Screenshot of main app'](https://github.com/LYunZhi/react-project/blob/master/docs/Screen%20Shot%202018-11-02%20at%204.16.31%20PM.png?raw=true)
+!['Screenshot of app with cat image'](https://github.com/LYunZhi/react-project/blob/master/docs/Screen%20Shot%202018-11-02%20at%204.17.31%20PM.png?raw=true)
