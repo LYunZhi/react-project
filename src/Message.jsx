@@ -7,6 +7,27 @@ function Message({message: {type, username, content}, color}) {
       color: color
     }
 
+    // Function to check if the content contains a url
+
+    const checkForImg = (content) => {
+      return content.match(/(https?:\/\/.*\.(?:png|jpg|gif))/i)
+    }
+
+    // Here we break the content into an array, then we check if it is an image link, if so, we embed it into JSX
+
+    if (checkForImg(content) !== null) {
+      const contentSeparated = content.split(' ')
+      const newData = contentSeparated.map((word) => {
+        if (checkForImg(word) !== null) {
+          const found = checkForImg(word).input
+          return (<img src={found}/>)
+        } else {
+          return word + ' '
+        }
+      })
+      content = newData
+    }
+
     switch (type) {
       case 'addMessage':
         messageBox = (<div className="message">
