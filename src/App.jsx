@@ -7,8 +7,7 @@ class App extends Component {
     super(props)
     this.state = {
       currentUser: {
-        name: '',
-        color: ''
+        name: ''
       },
       messages: [],
       notifications: [],
