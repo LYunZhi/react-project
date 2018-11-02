@@ -7,11 +7,12 @@ class App extends Component {
     super(props)
     this.state = {
       currentUser: {
-        name: ''
+        name: '',
+        color: ''
       },
       messages: [],
       notifications: [],
-      usersOnline: 0
+      usersOnline: 0,
     }
     this.socket = new WebSocket('ws://localhost:3001/')
     this.newMessage = this.newMessage.bind(this)
@@ -30,14 +31,17 @@ class App extends Component {
       oldUsername,
       username: name
     }))
+
+    this.setState({
+      currentUser: {
+        name: name
+      }
+    })
   }
 
   componentDidMount() {
     this.socket.onopen = (event) => {
       console.log('Connected to server')
-      this.socket.send(JSON.stringify({
-        type: 'onlineCount'
-      }))
     }
 
     this.socket.onmessage = (event) => {
@@ -57,9 +61,6 @@ class App extends Component {
           allMessages = this.state.messages.concat(incomingData)
 
           this.setState({
-            currentUser: {
-              name: incomingData.username
-            },
             messages: allMessages
           })
           break;
@@ -70,7 +71,7 @@ class App extends Component {
           })
           break;
         default:
-          throw new Error("Unknown event type " + data.type)
+          throw new Error("Unknown event type " + incomingType)
       }
     }
 
@@ -89,7 +90,7 @@ class App extends Component {
         <a href="/" className="navbar-brand">Chatty</a>
         <span className="counter">{this.state.usersOnline} users online</span>
       </nav>
-      <MessageList messages = { this.state.messages }/>
+      <MessageList messages = { this.state.messages } color = { this.state.color }/>
       <ChatBar currentUser = { this.state.currentUser } newMessage = {this.newMessage} changeName = {this.changeName}/>
       </div>
     );

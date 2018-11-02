@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 
-function Message({message: {type, username, content}}) {
+function Message({message: {type, username, content}, color}) {
 
-  let messageBox;
+    let messageBox;
+    const styles = {
+      color: color
+    }
 
     switch (type) {
       case 'addMessage':
         messageBox = (<div className="message">
-          <span className="message-username">{username}</span>
+          <span className="message-username" style={styles}>{username}</span>
           <span className="message-content">{content}</span>
         </div>)
         break;
